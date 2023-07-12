@@ -17,6 +17,7 @@ public class LinearSearch {
 		 int[] arr= {11,34,76,55,76,23,87};
 		 System.out.println("Enter number to search:");
 		 int num=sc.nextInt();
+		 sc.close();
 		 int index=linearSearch(arr, num);
 		 if(index!=-1)
 			 System.out.println("Element found at index : "+index);
