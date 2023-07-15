@@ -169,5 +169,6 @@ public class SinglyLinear {
 				break;
 			}
 		} while (choice != 0);
+		sc.close();
 	}
 }
