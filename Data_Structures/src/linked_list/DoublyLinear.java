@@ -2,44 +2,73 @@ package linked_list;
 
 import java.util.Scanner;
 
-public class SinglyLinear {
+public class DoublyLinear {
 	// Node is static member of class SinglyLinear
 	static class Node {
 		// Node class members
 		private int data;
 		private Node next;
+		private Node prev;
 		// Node class methods
 		public Node() {
 			data = 0;
 			next = null;
+			prev = null;
 		}
 		public Node(int val) {
 			data = val;
 			next = null;
+			prev = null;
 		}
 	}
 
 	// List class members
 	public Node head;
 	// List class methods
-	public SinglyLinear() {
+	public DoublyLinear() {
 		head = null;
 	}
+	
+	public boolean isEmpty() {
+		return head == null;
+	}
 
-	void display() {
-		System.out.println("List:");
+	void displayForward() {
+		System.out.println("List Forward:");
 		Node trav = head;
+		//special case 1: if empty list, then return
+		if(head == null)
+			return;
 		while (trav != null) { // traverse all nodes
 			System.out.println(trav.data);
 			trav = trav.next;
 		}
 	}
+	
+	void displayReverse() {
+		System.out.println("List Reverse:");
+		Node trav = head;
+		//special case 1: if empty list, then return
+		if(head == null)
+			return;
+		while(trav.next != null)		// traverse till last node
+			trav = trav.next;
+		while(trav != null) {
+			System.out.println(trav.data);
+			trav = trav.prev;
+		}
+	}
 
 	void addFirst(int val) {
 		Node nn = new Node(val); // create new node and initialize it
-//		Node trav = head;
+		// special case 1:if list is empty
+		if(isEmpty())
+			head = nn;
+		else {
 		nn.next = head; // next node next should point to head
+		head.prev = nn;	// new node's previous should point to head
 		head = nn; // head should point to new node
+		}
 	}
 
 	void addLast(int val) {
@@ -52,6 +81,7 @@ public class SinglyLinear {
 			while (trav.next != null) // traverse till last node
 				trav = trav.next;
 			trav.next = nn; // add new node after trav (trav.next)
+			nn.prev = trav;	// new node's previous points to trav
 		}
 	}
 
@@ -62,15 +92,20 @@ public class SinglyLinear {
 			addFirst(val);
 		else {
 			Node nn = new Node(val); // create new node and init
-			Node trav = head;
+			Node temp, trav = head;
 			for (int i = 1; i < pos - 1; i++) { // traverse till pos-1
 				// special case 3: if pos > length of list, add node at end
 				if (trav.next == null)
 					break;
 				trav = trav.next;
 			}
-			nn.next = trav.next; // new node next points to trav next
-			trav.next = nn; // trav next should point to new node4
+			temp = trav.next;	// take temp pointer to node after trav
+			nn.next = temp; // new node next points to temp(trav's next)
+			nn.prev = trav;	// new node's previous points to trav
+			trav.next = nn; // trav next should point to new node
+			// special case 3: if adding node at end, this line not required
+			if(temp != null)
+				temp.prev = nn;	// temp's previous points to new node
 		}
 	}
 
@@ -78,8 +113,13 @@ public class SinglyLinear {
 		// Special case:list is empty, add exception
 		if (head == null)
 			throw new RuntimeException("List is empty");
-		else
-			head = head.next; // head should point to next node
+		//special case 2:if list has single node, make head null
+		if(head.next == null)
+			head = null;
+		else {
+		head = head.next;  // head should point to next node
+		head.prev = null;	//head previous should be null;
+		}
 	}
 
 	void deleteLast() {
@@ -90,12 +130,11 @@ public class SinglyLinear {
 		if( head.next == null )
 			head = null;
 		else {
-			Node trav = head, temp = null; // take temp pointer running behind trav
+			Node trav = head; 
 			while (trav.next != null) { // traverse list till end
-				temp = trav;
 				trav = trav.next;
 			}
-			temp.next = null; // 2nd last element next pointer made null
+			trav.prev.next = null; // 2nd last element next pointer made null
 		}
 	}
 
@@ -107,15 +146,17 @@ public class SinglyLinear {
 		if (head == null || pos < 1)
 			throw new RuntimeException("List is empty or invalid position");
 		else {
-		Node temp = null, trav = head; // take temp pointer running behind trav
+		Node trav = head; // take temp pointer running behind trav
 		for (int i = 1; i < pos; i++) { // traverse till pos (trav)
 			//special case 3:if pos is beyond list length, throw exception
 			if(trav == null)
 				throw new RuntimeException("Invalid position");
-			temp = trav;
 			trav = trav.next;
 		}
-		temp.next = trav.next; // trav is node to be deleted and temp is node before that
+		trav.prev.next = trav.next;	// trav's previous's next points to trav's next
+		//special case 3: while deleting last node, skip next line
+		if(trav.next != null)
+			trav.next.prev = trav.prev; // trav's next's previous points to trav's previouss
 		}
 	}
 
@@ -126,7 +167,7 @@ public class SinglyLinear {
 
 	public static void main(String[] args) {
 		int choice, val, pos;
-		SinglyLinear list = new SinglyLinear();
+		DoublyLinear list = new DoublyLinear();
 		Scanner sc = new Scanner(System.in);
 		do {
 			System.out.println(
@@ -134,7 +175,8 @@ public class SinglyLinear {
 			choice = sc.nextInt();
 			switch (choice) {
 			case 1:
-				list.display();
+				list.displayForward();
+				list.displayReverse();
 				break;
 			case 2:
 				System.out.println("Enter new element: ");

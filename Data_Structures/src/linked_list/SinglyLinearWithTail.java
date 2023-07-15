@@ -121,6 +121,7 @@ public class SinglyLinearWithTail {
 	}
 
 	void deleteAll() {
+		head.next = null;
 		head = null; // all nodes will get garbage collected
 	}
 
@@ -155,14 +156,14 @@ public class SinglyLinearWithTail {
 				try {
 					list.deleteFirst();
 				} catch (Exception e) {
-					System.out.println(e.getStackTrace());
+					System.out.println(e.getMessage());
 				}
 				break;
 			case 6:
 				try {
 					list.deleteLast();
 				} catch (Exception e) {
-					System.out.println(e.getStackTrace());
+					System.out.println(e.getMessage());
 				}
 				break;
 			case 7:
