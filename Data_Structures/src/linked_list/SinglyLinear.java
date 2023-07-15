@@ -63,7 +63,7 @@ public class SinglyLinear {
 		else {
 			Node nn = new Node(val); // create new node and init
 			Node trav = head;
-			for (int i = 0; i < pos - 1; i++) { // traverse till pos-1
+			for (int i = 1; i < pos - 1; i++) { // traverse till pos-1
 				// special case 3: if pos > length of list, add node at end
 				if (trav.next == null)
 					break;
@@ -107,7 +107,7 @@ public class SinglyLinear {
 		if (head == null || pos < 1)
 			throw new RuntimeException("List is empty or invalid position");
 		Node temp = null, trav = head; // take temp pointer running behind trav
-		for (int i = 0; i < pos; i++) { // traverse till pos (trav)
+		for (int i = 1; i < pos; i++) { // traverse till pos (trav)
 			temp = trav;
 			trav = trav.next;
 		}
