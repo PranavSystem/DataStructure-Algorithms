@@ -174,5 +174,6 @@ public class SinglyLinearWithTail {
 				break;
 			}
 		} while (choice != 0);
+		sc.close();
 	}
 }
